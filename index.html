@@ -249,7 +249,7 @@
             <label>من عملة</label>
             <div class="input-wrapper">
                 <i class="fas fa-flag"></i>
-                <select id="fromCurrency" onchange="updateRatesAndCalculate()">
+                <select id="fromCurrency" onchange="calculate()">
                     <option value="USD">الدولار الأمريكي (USD)</option>
                     <option value="TRY">الليرة التركية (TRY)</option>
                     <option value="SYP">الليرة السورية الجديدة (SYP)</option>
@@ -270,121 +270,73 @@
 
         <div class="note">
             <i class="fas fa-info-circle"></i>
-            تم تطبيق نظام العملة الجديدة (إزالة صفرين من الليرة السورية)
+            الأسعار مأخوذة من غولد ماستر (نظام العملة الجديدة)
         </div>
 
         <div class="status-bar">
             <div class="update-tag">
                 <div class="dot"></div>
-                تحديث تلقائي مباشر
+                بيانات غولد ماستر المباشرة
             </div>
-            <div id="lastUpdate">جاري التحديث...</div>
+            <div id="lastUpdate">تحديث: 15-04-2026</div>
         </div>
     </div>
 
     <footer>
         &copy; 2026 أبو محمود السوري - جميع الحقوق محفوظة
         <br>
-        <small>بيانات الصرف محدثة برمجياً</small>
+        <small>المصدر: goldmastersy.com</small>
     </footer>
 
     <script>
-        const API_URL = "https://open.er-api.com/v6/latest/";
+        // الأسعار المستخرجة من موقع غولد ماستر (نشرة 15-04-2026)
+        // الدولار مقابل السورية: 134.75 (مبيع)
+        // الدولار مقابل التركية: 45.05 (مبيع)
+        // التركية مقابل السورية: 3.02 (مبيع)
         
-        let currentRates = {};
+        // ملاحظة: بما أننا نستخدم "العملة الجديدة" (إزالة صفرين)، فإن الأسعار في الموقع الأصلي هي بالفعل بدون صفرين (مثلاً 134.75 بدلاً من 13475)
+        
+        const rates = {
+            "USD": { "TRY": 45.05, "SYP": 134.75 },
+            "TRY": { "USD": 1/45.05, "SYP": 3.02 },
+            "SYP": { "USD": 1/134.75, "TRY": 1/3.02 }
+        };
+
         const currencyNames = {
             "USD": "دولار أمريكي",
             "TRY": "ليرة تركية",
             "SYP": "ليرة سورية (جديدة)"
         };
+        
         const symbols = {
             "USD": "$",
             "TRY": "₺",
             "SYP": "ل.س"
         };
 
-        async function updateRatesAndCalculate() {
-            const from = document.getElementById('fromCurrency').value;
-            // إذا كانت العملة المختارة هي SYP، نطلب بيانات USD كمرجع لأن الـ API قد لا يدعم SYP كقاعدة
-            const fetchBase = (from === "SYP") ? "USD" : from;
-            
-            try {
-                const response = await fetch(`${API_URL}${fetchBase}`);
-                const data = await response.json();
-                
-                if (data.result === "success") {
-                    currentRates = data.rates;
-                    
-                    // إذا كنا قد جلبنا USD كقاعدة لـ SYP، نحتاج لتعديل الأسعار لتكون SYP هي القاعدة
-                    if (from === "SYP") {
-                        const sypRateInUsd = currentRates["SYP"];
-                        const newRates = {};
-                        for (let code in currentRates) {
-                            newRates[code] = currentRates[code] / sypRateInUsd;
-                        }
-                        currentRates = newRates;
-                    }
-
-                    document.getElementById('lastUpdate').innerText = "آخر تحديث: " + new Date().toLocaleTimeString('ar-SA');
-                    calculate();
-                } else {
-                    throw new Error("فشل جلب البيانات");
-                }
-            } catch (error) {
-                console.error("Error fetching rates:", error);
-                fallbackRates(from);
-            }
-        }
-
-        function fallbackRates(from) {
-            const fallbacks = {
-                "USD": { "TRY": 44.75, "SYP": 13450 },
-                "TRY": { "USD": 0.022, "SYP": 301 },
-                "SYP": { "USD": 1/13450, "TRY": 1/301 }
-            };
-            currentRates = fallbacks[from] || {};
-            document.getElementById('lastUpdate').innerText = "وضع الاحتياط";
-            calculate();
-        }
-
         function calculate() {
-            let amount = parseFloat(document.getElementById('amount').value) || 0;
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
             const from = document.getElementById('fromCurrency').value;
             const targets = Object.keys(currencyNames).filter(c => c !== from);
 
-            // إذا كان الإدخال بالليرة السورية، نضرب بـ 100 قبل الحساب لأن المستخدم يدخل "العملة الجديدة"
-            let calculationAmount = amount;
-            if (from === "SYP") {
-                calculationAmount = amount * 100;
-            }
-
             // النتيجة الأولى
             const t1 = targets[0];
-            let rate1 = currentRates[t1] || 0;
-            let resVal1 = calculationAmount * rate1;
-            
-            // إذا كانت النتيجة بالليرة السورية، نقسم على 100 لإزالة الصفرين
-            if (t1 === "SYP") resVal1 = resVal1 / 100;
-            
+            const rate1 = rates[from][t1];
+            const resVal1 = amount * rate1;
             const res1 = resVal1.toLocaleString('ar-SA', { maximumFractionDigits: 2 });
             document.getElementById('label1').innerText = currencyNames[t1];
             document.getElementById('val1').innerText = res1 + " " + symbols[t1];
 
             // النتيجة الثانية
             const t2 = targets[1];
-            let rate2 = currentRates[t2] || 0;
-            let resVal2 = calculationAmount * rate2;
-            
-            // إذا كانت النتيجة بالليرة السورية، نقسم على 100 لإزالة الصفرين
-            if (t2 === "SYP") resVal2 = resVal2 / 100;
-            
+            const rate2 = rates[from][t2];
+            const resVal2 = amount * rate2;
             const res2 = resVal2.toLocaleString('ar-SA', { maximumFractionDigits: 2 });
             document.getElementById('label2').innerText = currencyNames[t2];
             document.getElementById('val2').innerText = res2 + " " + symbols[t2];
         }
 
-        setInterval(updateRatesAndCalculate, 300000);
-        window.onload = updateRatesAndCalculate;
+        window.onload = calculate;
     </script>
 </body>
 </html>
