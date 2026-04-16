@@ -2,8 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو محمود السوري - محول العملات السوري التركي الدولار</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="أبو محمود السوري">
+    <title>أبو محمود السوري - محول العملات</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -12,11 +15,14 @@
             --secondary: #3b82f6;
             --accent: #f59e0b;
             --success: #10b981;
+            --danger: #ef4444;
             --bg: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
+            --safe-area-inset-top: env(safe-area-inset-top, 0px);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         * {
@@ -24,80 +30,94 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text-main);
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 20px;
+            padding-top: var(--safe-area-inset-top);
+            padding-bottom: var(--safe-area-inset-bottom);
         }
 
-        header {
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            padding: 20px 16px;
             text-align: center;
-            margin-bottom: 40px;
-            width: 100%;
-            max-width: 600px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            flex-shrink: 0;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .logo-icon {
-            font-size: 2.5rem;
-            color: var(--secondary);
-            filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.2));
-        }
-
-        h1 {
-            font-size: 2.2rem;
+        .app-header h1 {
+            font-size: 1.8rem;
             font-weight: 800;
-            color: var(--primary);
+            margin-bottom: 4px;
             letter-spacing: -0.5px;
         }
 
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
+        .app-header p {
+            font-size: 0.9rem;
+            opacity: 0.95;
         }
 
-        .main-card {
+        /* Main Content */
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .app-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .app-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .app-content::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        /* Card */
+        .input-card {
             background: var(--card-bg);
             width: 100%;
-            max-width: 500px;
-            border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            padding: 32px;
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .main-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 16px;
         }
 
         .input-section {
-            margin-bottom: 24px;
+            margin-bottom: 16px;
+        }
+
+        .input-section:last-child {
+            margin-bottom: 0;
         }
 
         label {
             display: block;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 8px;
             color: var(--text-main);
             font-size: 0.95rem;
@@ -111,14 +131,16 @@
 
         .input-wrapper i {
             position: absolute;
-            right: 16px;
-            color: var(--text-muted);
+            right: 14px;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            pointer-events: none;
         }
 
         input, select {
             width: 100%;
-            padding: 14px 45px 14px 16px;
-            border-radius: 12px;
+            padding: 14px 45px 14px 14px;
+            border-radius: 14px;
             border: 2px solid var(--border);
             font-size: 1.1rem;
             font-weight: 600;
@@ -126,6 +148,8 @@
             background: #f1f5f9;
             outline: none;
             appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
 
         input:focus, select:focus {
@@ -134,55 +158,92 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
+        select {
+            padding-right: 40px;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            background-size: 20px;
+            padding-left: 40px;
+            padding-right: 14px;
+        }
+
+        /* Results */
+        .results-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .results-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
         .results-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 24px;
+            gap: 12px;
         }
 
         .result-item {
-            background: #f8fafc;
-            padding: 16px;
-            border-radius: 16px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 14px;
+            border-radius: 14px;
             border: 1px solid var(--border);
             text-align: center;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            active: transform 0.1s ease;
+        }
+
+        .result-item:active {
+            transform: scale(0.98);
         }
 
         .result-item:hover {
             transform: translateY(-2px);
-            border-color: var(--secondary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .res-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             font-weight: 600;
         }
 
         .res-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--secondary);
+            word-break: break-word;
         }
 
-        .status-bar {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px dashed var(--border);
+        /* Status */
+        .status-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 14px;
+            margin-bottom: 16px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.85rem;
         }
 
-        .update-tag {
+        .status-left {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             color: var(--success);
             font-weight: 600;
         }
@@ -201,101 +262,101 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        .note {
-            margin-top: 15px;
-            padding: 10px;
-            background: #fffbeb;
-            border: 1px solid #fef3c7;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            color: #92400e;
-            text-align: center;
-        }
-
-        footer {
-            margin-top: 40px;
-            text-align: center;
+        .status-right {
             color: var(--text-muted);
-            font-size: 0.9rem;
         }
 
+        /* Footer */
+        .app-footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            padding: 12px 16px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* Responsive */
         @media (max-width: 480px) {
-            .main-card { padding: 20px; }
-            h1 { font-size: 1.8rem; }
+            .app-header h1 { font-size: 1.6rem; }
             .results-grid { grid-template-columns: 1fr; }
+            .input-card, .results-card, .status-card { padding: 16px; }
+        }
+
+        /* Prevent zoom on input focus (iOS) */
+        input, select {
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <i class="fas fa-coins logo-icon"></i>
-            <h1>أبو محمود السوري</h1>
-        </div>
-        <p class="subtitle">تحويل العملات (سوري - تركي - دولار)</p>
-    </header>
-
-    <div class="main-card">
-        <div class="input-section">
-            <label>المبلغ المراد تحويله</label>
-            <div class="input-wrapper">
-                <i class="fas fa-money-bill-wave"></i>
-                <input type="number" id="amount" value="1" placeholder="0.00" oninput="calculate()">
-            </div>
-        </div>
-
-        <div class="input-section">
-            <label>من عملة</label>
-            <div class="input-wrapper">
-                <i class="fas fa-flag"></i>
-                <select id="fromCurrency" onchange="calculate()">
-                    <option value="USD">الدولار الأمريكي (USD)</option>
-                    <option value="TRY">الليرة التركية (TRY)</option>
-                    <option value="SYP">الليرة السورية الجديدة (SYP)</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="results-grid">
-            <div class="result-item">
-                <div class="res-label" id="label1">النتيجة 1</div>
-                <div class="res-value" id="val1">0.00</div>
-            </div>
-            <div class="result-item">
-                <div class="res-label" id="label2">النتيجة 2</div>
-                <div class="res-value" id="val2">0.00</div>
-            </div>
-        </div>
-
-        <div class="note">
-            <i class="fas fa-info-circle"></i>
-            الأسعار مأخوذة من غولد ماستر (نظام العملة الجديدة)
-        </div>
-
-        <div class="status-bar">
-            <div class="update-tag">
-                <div class="dot"></div>
-                بيانات غولد ماستر المباشرة
-            </div>
-            <div id="lastUpdate">تحديث: 15-04-2026</div>
-        </div>
+    <!-- Header -->
+    <div class="app-header">
+        <h1>💱 أبو محمود</h1>
+        <p>محول العملات السوري التركي الدولار</p>
     </div>
 
-    <footer>
-        &copy; 2026 أبو محمود السوري - جميع الحقوق محفوظة
-        <br>
-        <small>المصدر: goldmastersy.com</small>
-    </footer>
+    <!-- Main Content -->
+    <div class="app-content">
+        
+        <!-- Input Card -->
+        <div class="input-card">
+            <div class="input-section">
+                <label>المبلغ</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-coins"></i>
+                    <input type="number" id="amount" value="1" placeholder="أدخل المبلغ" oninput="calculate()">
+                </div>
+            </div>
+
+            <div class="input-section">
+                <label>من عملة</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-flag"></i>
+                    <select id="fromCurrency" onchange="calculate()">
+                        <option value="USD">🇺🇸 دولار أمريكي</option>
+                        <option value="TRY">🇹🇷 ليرة تركية</option>
+                        <option value="SYP">🇸🇾 ليرة سورية</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Card -->
+        <div class="results-card">
+            <div class="results-title">النتائج</div>
+            <div class="results-grid">
+                <div class="result-item">
+                    <div class="res-label" id="label1">النتيجة 1</div>
+                    <div class="res-value" id="val1">0.00</div>
+                </div>
+                <div class="result-item">
+                    <div class="res-label" id="label2">النتيجة 2</div>
+                    <div class="res-value" id="val2">0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Card -->
+        <div class="status-card">
+            <div class="status-left">
+                <div class="dot"></div>
+                <span>غولد ماستر</span>
+            </div>
+            <div class="status-right" id="lastUpdate">15-04-2026</div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="app-footer">
+        أبو محمود السوري © 2026 | goldmastersy.com
+    </div>
 
     <script>
-        // الأسعار المستخرجة من موقع غولد ماستر (نشرة 15-04-2026)
-        // الدولار مقابل السورية: 134.75 (مبيع)
-        // الدولار مقابل التركية: 45.05 (مبيع)
-        // التركية مقابل السورية: 3.02 (مبيع)
-        
-        // ملاحظة: بما أننا نستخدم "العملة الجديدة" (إزالة صفرين)، فإن الأسعار في الموقع الأصلي هي بالفعل بدون صفرين (مثلاً 134.75 بدلاً من 13475)
-        
+        // أسعار الصرف من غولد ماستر
         const rates = {
             "USD": { "TRY": 45.05, "SYP": 134.75 },
             "TRY": { "USD": 1/45.05, "SYP": 3.02 },
@@ -305,7 +366,7 @@
         const currencyNames = {
             "USD": "دولار أمريكي",
             "TRY": "ليرة تركية",
-            "SYP": "ليرة سورية (جديدة)"
+            "SYP": "ليرة سورية"
         };
         
         const symbols = {
@@ -335,6 +396,11 @@
             document.getElementById('label2').innerText = currencyNames[t2];
             document.getElementById('val2').innerText = res2 + " " + symbols[t2];
         }
+
+        // منع التكبير على الإدخال (iOS)
+        document.addEventListener('touchmove', function(event) {
+            if (event.scale !== 1) { event.preventDefault(); }
+        }, { passive: false });
 
         window.onload = calculate;
     </script>
