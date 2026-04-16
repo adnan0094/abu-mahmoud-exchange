@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو محمود السوري - محول العملات</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>أبو محمود السوري - محول العملات الاحترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #e74c3c;
-            --accent-color: #f1c40f;
-            --bg-gradient: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
         }
 
         * {
@@ -23,251 +27,350 @@
         }
 
         body {
+            background-color: var(--bg);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            overflow-x: hidden;
-            perspective: 1000px;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
             padding: 20px;
-            transform-style: preserve-3d;
-            animation: float 6s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotateX(5deg) rotateY(-5deg); }
-            50% { transform: translateY(-20px) rotateX(-5deg) rotateY(5deg); }
-        }
-
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
-            color: white;
+        header {
             text-align: center;
-            transform: translateZ(50px);
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.2));
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            color: var(--accent-color);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
         }
 
-        p.subtitle {
-            margin-bottom: 30px;
+        .subtitle {
+            color: var(--text-muted);
             font-size: 1.1rem;
-            opacity: 0.9;
         }
 
-        .input-group {
-            margin-bottom: 25px;
-            text-align: right;
+        .main-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 32px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+
+        .input-section {
+            margin-bottom: 24px;
         }
 
         label {
             display: block;
+            font-weight: 600;
             margin-bottom: 8px;
-            font-weight: bold;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            right: 16px;
+            color: var(--text-muted);
         }
 
         input, select {
             width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            padding: 14px 45px 14px 16px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
             font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            background: #f1f5f9;
             outline: none;
-            transition: all 0.3s ease;
+            appearance: none;
         }
 
         input:focus, select:focus {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+            border-color: var(--secondary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
-        select option {
-            background: #2c3e50;
+        .swap-btn {
+            display: flex;
+            justify-content: center;
+            margin: -12px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .swap-btn button {
+            background: var(--secondary);
             color: white;
-        }
-
-        .results {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .result-box {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
 
-        .result-box:hover {
-            transform: scale(1.05) translateZ(20px);
-            background: rgba(255, 255, 255, 0.25);
+        .swap-btn button:hover {
+            transform: rotate(180deg) scale(1.1);
         }
 
-        .result-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 5px;
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 24px;
         }
 
-        .result-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--accent-color);
+        .result-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.2s ease;
         }
 
-        .footer {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            opacity: 0.7;
+        .result-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--secondary);
         }
 
-        /* 3D Elements */
-        .coin {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background: var(--accent-color);
-            border-radius: 50%;
+        .res-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .res-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .status-bar {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border);
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 1.5rem;
-            box-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
-            z-index: -1;
-            animation: spin 10s linear infinite;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
-        @keyframes spin {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
+        .update-tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--success);
+            font-weight: 600;
         }
 
-        .coin-1 { top: -30px; left: -30px; animation-delay: 0s; }
-        .coin-2 { bottom: -30px; right: -30px; animation-delay: -5s; }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
 
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .main-card { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+            .results-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="coin coin-1">$</div>
-        <div class="coin coin-2">₺</div>
-        
-        <div class="card">
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-coins logo-icon"></i>
             <h1>أبو محمود السوري</h1>
-            <p class="subtitle">أفضل محول عملات بأسعار السوق الحقيقية</p>
+        </div>
+        <p class="subtitle">تحويل العملات بأسعار السوق المباشرة</p>
+    </header>
 
-            <div class="input-group">
-                <label for="amount">المقدار:</label>
-                <input type="number" id="amount" placeholder="أدخل المبلغ هنا..." value="1" oninput="convert()">
+    <div class="main-card">
+        <div class="input-section">
+            <label>المبلغ المراد تحويله</label>
+            <div class="input-wrapper">
+                <i class="fas fa-money-bill-wave"></i>
+                <input type="number" id="amount" value="1" placeholder="0.00" oninput="calculate()">
             </div>
+        </div>
 
-            <div class="input-group">
-                <label for="fromCurrency">من عملة:</label>
-                <select id="fromCurrency" onchange="convert()">
-                    <option value="USD">دولار أمريكي ($)</option>
-                    <option value="SYP">ليرة سورية (ل.س)</option>
-                    <option value="TRY">ليرة تركية (₺)</option>
+        <div class="input-section">
+            <label>من عملة</label>
+            <div class="input-wrapper">
+                <i class="fas fa-flag"></i>
+                <select id="fromCurrency" onchange="updateRatesAndCalculate()">
+                    <option value="USD">الدولار الأمريكي (USD)</option>
+                    <option value="TRY">الليرة التركية (TRY)</option>
+                    <option value="SYP">الليرة السورية (SYP)</option>
                 </select>
             </div>
+        </div>
 
-            <div class="results">
-                <div class="result-box" id="res1-box">
-                    <div class="result-label" id="res1-label">ليرة سورية</div>
-                    <div class="result-value" id="res1-val">0</div>
-                </div>
-                <div class="result-box" id="res2-box">
-                    <div class="result-label" id="res2-label">ليرة تركية</div>
-                    <div class="result-value" id="res2-val">0</div>
-                </div>
+        <div class="results-grid">
+            <div class="result-item">
+                <div class="res-label" id="label1">النتيجة 1</div>
+                <div class="res-value" id="val1">0.00</div>
             </div>
+            <div class="result-item">
+                <div class="res-label" id="label2">النتيجة 2</div>
+                <div class="res-value" id="val2">0.00</div>
+            </div>
+        </div>
 
-            <div class="footer">
-                تم التحديث بناءً على أسعار السوق اليوم<br>
-                &copy; 2026 أبو محمود السوري - جميع الحقوق محفوظة
+        <div class="status-bar">
+            <div class="update-tag">
+                <div class="dot"></div>
+                تحديث تلقائي مباشر
             </div>
+            <div id="lastUpdate">جاري التحديث...</div>
         </div>
     </div>
 
+    <footer>
+        &copy; 2026 أبو محمود السوري - جميع الحقوق محفوظة
+        <br>
+        <small>بيانات الصرف مقدمة من ExchangeRate-API</small>
+    </footer>
+
     <script>
-        // أسعار الصرف الثابتة بناءً على البحث
-        const rates = {
-            USD: { SYP: 13450, TRY: 44.75 },
-            SYP: { USD: 1/13450, TRY: 1/301 },
-            TRY: { USD: 1/44.75, SYP: 301 }
+        // ملاحظة: في بيئة الإنتاج يفضل استخدام مفتاح API خاص بك
+        // هذا الرابط يستخدم النسخة المجانية التي لا تتطلب مفتاحاً لبعض العملات أو مفتاحاً عاماً
+        const API_URL = "https://open.er-api.com/v6/latest/";
+        
+        let currentRates = {};
+        const currencyNames = {
+            "USD": "دولار أمريكي",
+            "TRY": "ليرة تركية",
+            "SYP": "ليرة سورية"
         };
-
-        const names = {
-            USD: "دولار أمريكي",
-            SYP: "ليرة سورية",
-            TRY: "ليرة تركية"
-        };
-
         const symbols = {
-            USD: "$",
-            SYP: "ل.س",
-            TRY: "₺"
+            "USD": "$",
+            "TRY": "₺",
+            "SYP": "ل.س"
         };
 
-        function convert() {
-            const amount = document.getElementById('amount').value;
+        async function updateRatesAndCalculate() {
             const from = document.getElementById('fromCurrency').value;
-            
-            if (!amount || amount <= 0) {
-                document.getElementById('res1-val').innerText = "0";
-                document.getElementById('res2-val').innerText = "0";
-                return;
+            try {
+                const response = await fetch(`${API_URL}${from}`);
+                const data = await response.json();
+                
+                if (data.result === "success") {
+                    currentRates = data.rates;
+                    document.getElementById('lastUpdate').innerText = "آخر تحديث: " + new Date().toLocaleTimeString('ar-SA');
+                    calculate();
+                } else {
+                    throw new Error("فشل جلب البيانات");
+                }
+            } catch (error) {
+                console.error("Error fetching rates:", error);
+                // في حال فشل الـ API، نستخدم أسعاراً تقريبية مخزنة مسبقاً
+                fallbackRates(from);
             }
-
-            const targets = Object.keys(rates).filter(c => c !== from);
-            
-            // النتيجة الأولى
-            const target1 = targets[0];
-            const val1 = (amount * rates[from][target1]).toLocaleString(undefined, {maximumFractionDigits: 2});
-            document.getElementById('res1-label').innerText = names[target1];
-            document.getElementById('res1-val').innerText = val1 + " " + symbols[target1];
-
-            // النتيجة الثانية
-            const target2 = targets[1];
-            const val2 = (amount * rates[from][target2]).toLocaleString(undefined, {maximumFractionDigits: 2});
-            document.getElementById('res2-label').innerText = names[target2];
-            document.getElementById('res2-val').innerText = val2 + " " + symbols[target2];
         }
 
-        // تشغيل التحويل عند التحميل
-        window.onload = convert;
+        function fallbackRates(from) {
+            // أسعار احتياطية في حال انقطاع الإنترنت أو فشل الـ API
+            const fallbacks = {
+                "USD": { "TRY": 44.75, "SYP": 13450 },
+                "TRY": { "USD": 0.022, "SYP": 301 },
+                "SYP": { "USD": 0.000074, "TRY": 0.0033 }
+            };
+            currentRates = fallbacks[from] || {};
+            document.getElementById('lastUpdate').innerText = "وضع الاحتياط (أسعار تقريبية)";
+            calculate();
+        }
+
+        function calculate() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const from = document.getElementById('fromCurrency').value;
+            const targets = Object.keys(currencyNames).filter(c => c !== from);
+
+            // النتيجة الأولى
+            const t1 = targets[0];
+            const rate1 = currentRates[t1] || 0;
+            const res1 = (amount * rate1).toLocaleString('ar-SA', { maximumFractionDigits: 2 });
+            document.getElementById('label1').innerText = currencyNames[t1];
+            document.getElementById('val1').innerText = res1 + " " + symbols[t1];
+
+            // النتيجة الثانية
+            const t2 = targets[1];
+            const rate2 = currentRates[t2] || 0;
+            const res2 = (amount * rate2).toLocaleString('ar-SA', { maximumFractionDigits: 2 });
+            document.getElementById('label2').innerText = currencyNames[t2];
+            document.getElementById('val2').innerText = res2 + " " + symbols[t2];
+        }
+
+        // التحديث التلقائي كل 5 دقائق
+        setInterval(updateRatesAndCalculate, 300000);
+
+        // التشغيل الأول
+        window.onload = updateRatesAndCalculate;
     </script>
 </body>
 </html>
